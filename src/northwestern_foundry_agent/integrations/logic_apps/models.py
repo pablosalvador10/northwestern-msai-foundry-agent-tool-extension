@@ -6,7 +6,7 @@ data exchanged with Logic Apps workflows.
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import UTC, datetime
 from enum import Enum
 from typing import Any
 
@@ -61,7 +61,7 @@ class LogicAppRequest(BaseModel):
             "inputData": self.input_data,
             "correlationId": self.correlation_id,
             "metadata": self.metadata,
-            "timestamp": datetime.utcnow().isoformat(),
+            "timestamp": datetime.now(UTC).isoformat(),
         }
 
 

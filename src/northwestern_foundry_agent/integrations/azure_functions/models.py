@@ -6,10 +6,15 @@ responses from Azure Functions.
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import UTC, datetime
 from typing import Any
 
 from pydantic import BaseModel, Field
+
+
+def _utc_now() -> datetime:
+    """Return current UTC datetime."""
+    return datetime.now(UTC)
 
 
 class FunctionResponse(BaseModel):
@@ -26,7 +31,7 @@ class FunctionResponse(BaseModel):
     message: str = Field(default="", description="Response message")
     data: dict[str, Any] | None = Field(default=None, description="Response data payload")
     timestamp: datetime = Field(
-        default_factory=datetime.utcnow,
+        default_factory=_utc_now,
         description="Response timestamp",
     )
 
@@ -46,7 +51,7 @@ class HealthCheckResponse(BaseModel):
     service_name: str = Field(default="azure-functions", description="Service name")
     version: str = Field(default="1.0.0", description="Service version")
     timestamp: datetime = Field(
-        default_factory=datetime.utcnow,
+        default_factory=_utc_now,
         description="Health check timestamp",
     )
     details: dict[str, Any] = Field(
@@ -74,6 +79,6 @@ class QuoteResponse(BaseModel):
     author: str = Field(description="Quote author")
     category: str = Field(default="motivation", description="Quote category")
     timestamp: datetime = Field(
-        default_factory=datetime.utcnow,
+        default_factory=_utc_now,
         description="Response timestamp",
     )

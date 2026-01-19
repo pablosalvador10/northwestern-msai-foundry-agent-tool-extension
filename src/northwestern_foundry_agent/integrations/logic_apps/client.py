@@ -204,7 +204,28 @@ class LogicAppsClient:
         """
         import asyncio
 
-        return asyncio.get_event_loop().run_until_complete(self.trigger(request))
+        try:
+            asyncio.get_running_loop()
+        except RuntimeError:
+            # No running loop, create one
+            result: LogicAppResponse = asyncio.run(
+                self.trigger(request)  # type: ignore[arg-type]
+            )
+            return result
+        else:
+            # Running in async context - this is unusual but handle it
+            import warnings
+
+            warnings.warn(
+                "Calling sync method from async context. Consider using the async method.",
+                stacklevel=2,
+            )
+            # Create a new event loop for this call
+            loop = asyncio.new_event_loop()
+            try:
+                return loop.run_until_complete(self.trigger(request))
+            finally:
+                loop.close()
 
 
 def create_logic_app_handler(client: LogicAppsClient) -> Any:

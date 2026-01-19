@@ -163,7 +163,7 @@ def retry_async(
 
 
 async def retry_with_timeout(
-    coro: Awaitable[T],
+    coro_factory: Callable[[], Awaitable[T]],
     timeout: float,
     max_attempts: int = DEFAULT_MAX_ATTEMPTS,
 ) -> T:
@@ -173,7 +173,7 @@ async def retry_with_timeout(
     that may hang or fail transiently.
 
     Args:
-        coro: The awaitable to execute.
+        coro_factory: A callable that returns a coroutine to execute.
         timeout: Timeout in seconds for each attempt.
         max_attempts: Maximum number of retry attempts.
 
@@ -185,8 +185,10 @@ async def retry_with_timeout(
         Exception: If all attempts fail with non-timeout errors.
 
     Example:
+        >>> async def make_request():
+        ...     return await fetch_data_async()
         >>> result = await retry_with_timeout(
-        ...     fetch_data_async(),
+        ...     make_request,  # Pass a callable, not a coroutine
         ...     timeout=5.0,
         ...     max_attempts=3
         ... )
@@ -195,7 +197,8 @@ async def retry_with_timeout(
 
     for attempt in range(1, max_attempts + 1):
         try:
-            return await asyncio.wait_for(coro, timeout=timeout)
+            # coro_factory should be a callable that returns a coroutine
+            return await asyncio.wait_for(coro_factory(), timeout=timeout)
         except TimeoutError:
             logger.warning(
                 "Attempt %d/%d timed out after %.1f seconds",

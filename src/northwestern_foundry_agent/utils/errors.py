@@ -142,9 +142,31 @@ class ToolRegistrationError(FoundryAgentError):
     This exception is raised when attempting to register a tool
     (function or Logic App) with the Foundry agent fails.
 
+    Attributes:
+        tool_name: Name of the tool that failed to register.
+
     Example:
         >>> raise ToolRegistrationError(
         ...     "Failed to register tool",
-        ...     details={"tool_name": "health_check", "reason": "Invalid schema"}
+        ...     tool_name="health_check"
         ... )
     """
+
+    def __init__(
+        self,
+        message: str,
+        tool_name: str | None = None,
+        details: dict[str, object] | None = None,
+    ) -> None:
+        """Initialize the exception.
+
+        Args:
+            message: Human-readable error description.
+            tool_name: Name of the tool that failed to register.
+            details: Optional dictionary with additional error context.
+        """
+        error_details = details or {}
+        if tool_name:
+            error_details["tool_name"] = tool_name
+        super().__init__(message, error_details)
+        self.tool_name = tool_name

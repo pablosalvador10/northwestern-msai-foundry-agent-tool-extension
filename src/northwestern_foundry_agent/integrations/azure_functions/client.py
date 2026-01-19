@@ -212,7 +212,28 @@ class AzureFunctionsClient:
         """
         import asyncio
 
-        return asyncio.get_event_loop().run_until_complete(self.health_check())
+        try:
+            asyncio.get_running_loop()
+        except RuntimeError:
+            # No running loop, create one
+            result: HealthCheckResponse = asyncio.run(
+                self.health_check()  # type: ignore[arg-type]
+            )
+            return result
+        else:
+            # Running in async context - this is unusual but handle it
+            import warnings
+
+            warnings.warn(
+                "Calling sync method from async context. Consider using the async method.",
+                stacklevel=2,
+            )
+            # Create a new event loop for this call
+            loop = asyncio.new_event_loop()
+            try:
+                return loop.run_until_complete(self.health_check())
+            finally:
+                loop.close()
 
     def quote_of_the_day_sync(
         self,
@@ -231,7 +252,28 @@ class AzureFunctionsClient:
         """
         import asyncio
 
-        return asyncio.get_event_loop().run_until_complete(self.quote_of_the_day(category))
+        try:
+            asyncio.get_running_loop()
+        except RuntimeError:
+            # No running loop, create one
+            result: QuoteResponse = asyncio.run(
+                self.quote_of_the_day(category)  # type: ignore[arg-type]
+            )
+            return result
+        else:
+            # Running in async context - this is unusual but handle it
+            import warnings
+
+            warnings.warn(
+                "Calling sync method from async context. Consider using the async method.",
+                stacklevel=2,
+            )
+            # Create a new event loop for this call
+            loop = asyncio.new_event_loop()
+            try:
+                return loop.run_until_complete(self.quote_of_the_day(category))
+            finally:
+                loop.close()
 
 
 def create_function_handlers(client: AzureFunctionsClient) -> dict[str, Any]:
