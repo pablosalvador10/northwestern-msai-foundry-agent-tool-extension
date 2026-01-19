@@ -5,43 +5,42 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
-Build AI agents with the **Microsoft Agent Framework SDK** and connect them to Azure Functions and Logic Apps as decoupled cloud-based tools. This project provides production-ready abstractions, comprehensive documentation, and step-by-step labs following Microsoft's official agent patterns.
+Build AI agents with the Microsoft Agent Framework SDK and connect them to Azure Functions and Logic Apps as decoupled cloud-based tools. This project provides production-ready abstractions, comprehensive documentation, and step-by-step labs following Microsoft's official agent patterns.
 
-## 🎯 Built With Microsoft Agent Framework
+## Built With Microsoft Agent Framework
 
-This project uses the official **Microsoft Agent Framework SDK** (`azure-ai-projects` and `azure-ai-agents`) to create production-ready AI agents that can leverage Azure cloud services as tools.
+This project uses the official Microsoft Agent Framework SDK (azure-ai-projects and azure-ai-agents) to create production-ready AI agents that can leverage Azure cloud services as tools.
 
-## 📚 Table of Contents
+## Table of Contents
 
-- [Features](#-features)
-- [Architecture](#-architecture)
-- [Quick Start](#-quick-start)
-- [Project Structure](#-project-structure)
-- [Installation](#-installation)
-- [Usage Examples](#-usage-examples)
-- [Labs and Tutorials](#-labs-and-tutorials)
-- [Configuration](#-configuration)
-- [Testing](#-testing)
-- [Contributing](#-contributing)
-- [GitHub Copilot Tips](#-github-copilot-tips)
-- [Resources](#-resources)
+- [Features](#features)
+- [Architecture](#architecture)
+- [Quick Start](#quick-start)
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Usage Examples](#usage-examples)
+- [Labs and Tutorials](#labs-and-tutorials)
+- [Configuration](#configuration)
+- [Testing](#testing)
+- [Contributing](#contributing)
+- [Resources](#resources)
 
-## ✨ Features
+## Features
 
-- **🤖 Microsoft Agent Framework**: Built with official `azure-ai-projects` SDK
-- **🔧 Azure Functions Integration**: Cloud-based computational tools
-- **⚡ Logic Apps Orchestration**: Cloud-based workflow tools
-- **🏗️ Decoupled Architecture**: Tools deployed independently from agent
-- **🛡️ Type Safety**: Comprehensive type hints and Pydantic validation
-- **📝 Production-Ready Logging**: Structured logging with no print statements
-- **🔐 Security First**: Managed Identity and Function Key authentication
-- **⚡ Async Support**: Both synchronous and asynchronous APIs
-- **🧪 Comprehensive Tests**: pytest-based test suite
-- **📖 Step-by-Step Labs**: Interactive Jupyter notebooks
-- **🎯 PEP8 Compliant**: Black, Ruff, and MyPy enforced
-- **🚀 CI/CD Ready**: GitHub Actions workflows
+- Microsoft Agent Framework: Built with official azure-ai-projects SDK
+- Azure Functions Integration: Cloud-based computational tools
+- Logic Apps Orchestration: Cloud-based workflow tools
+- Decoupled Architecture: Tools deployed independently from agent
+- Type Safety: Comprehensive type hints and Pydantic validation
+- Production-Ready Logging: Structured logging with no print statements
+- Security First: Managed Identity and Function Key authentication
+- Async Support: Both synchronous and asynchronous APIs
+- Comprehensive Tests: pytest-based test suite
+- Step-by-Step Labs: Interactive Jupyter notebooks
+- PEP8 Compliant: Black, Ruff, and MyPy enforced
+- CI/CD Ready: GitHub Actions workflows
 
-## 🏗️ Architecture
+## Architecture
 
 The system follows Microsoft Agent Framework patterns with decoupled cloud tools:
 
@@ -65,11 +64,11 @@ The system follows Microsoft Agent Framework patterns with decoupled cloud tools
     └──────────┘ └───────────┘
 ```
 
-**Key Principles:**
-- **Agent in Isolation**: Created using Microsoft Agent Framework
-- **Decoupled Tools**: Azure Functions and Logic Apps deployed independently
-- **Tool Registration**: Agent learns about cloud tools via registration
-- **Automatic Orchestration**: Agent decides when to invoke tools
+Key Principles:
+- Agent in Isolation: Created using Microsoft Agent Framework
+- Decoupled Tools: Azure Functions and Logic Apps deployed independently
+- Tool Registration: Agent learns about cloud tools via registration
+- Automatic Orchestration: Agent decides when to invoke tools
 │  └──────────────┴──────────────┴─────────────────┘  │
 └─────────────────────────────────────────────────────┘
 ```

@@ -63,23 +63,26 @@ class AzureFunctionsClient:
     def __init__(self, config: FunctionConfig) -> None:
         """Initialize the Azure Functions client.
 
-        Args:
-            config: Configuration for the Azure Function.
+        :param config: Configuration object containing function endpoint and authentication settings.
+        :raises ValueError: If configuration is invalid.
         """
-        self.config = config
-        self._credential: Optional[DefaultAzureCredential] = None
+        try:
+            self.config = config
+            self._credential: Optional[DefaultAzureCredential] = None
 
-        if self.config.use_managed_identity:
-            self._credential = DefaultAzureCredential()
-            logger.info("Initialized Azure Functions client with managed identity")
-        else:
-            logger.info("Initialized Azure Functions client with function key")
+            if self.config.use_managed_identity:
+                self._credential = DefaultAzureCredential()
+                logger.info("Initialized Azure Functions client with managed identity")
+            else:
+                logger.info("Initialized Azure Functions client with function key")
+        except Exception as e:
+            logger.error(f"Failed to initialize Azure Functions client: {str(e)}")
+            raise ValueError(f"Client initialization failed: {str(e)}") from e
 
     def _get_headers(self) -> Dict[str, str]:
         """Get HTTP headers for the request.
 
-        Returns:
-            Dictionary of HTTP headers including authentication.
+        :return: Dictionary containing Content-Type and optional authentication headers.
         """
         headers = {"Content-Type": "application/json"}
 
@@ -94,16 +97,11 @@ class AzureFunctionsClient:
     ) -> Dict[str, Any]:
         """Invoke an Azure Function synchronously.
 
-        Args:
-            payload: JSON payload to send to the function.
-            method: HTTP method (GET, POST, PUT, etc.).
-
-        Returns:
-            The JSON response from the function.
-
-        Raises:
-            requests.RequestException: If the request fails.
-            ValueError: If the response is not valid JSON.
+        :param payload: JSON payload to send to the function.
+        :param method: HTTP method to use for the request.
+        :return: The JSON response from the function.
+        :raises requests.RequestException: If the HTTP request fails.
+        :raises ValueError: If the response cannot be parsed as JSON.
         """
         logger.info(f"Invoking Azure Function: {self.config.function_url}")
         logger.debug(f"Request method: {method}, payload keys: {list(payload.keys())}")
@@ -136,16 +134,11 @@ class AzureFunctionsClient:
     ) -> Dict[str, Any]:
         """Invoke an Azure Function asynchronously.
 
-        Args:
-            payload: JSON payload to send to the function.
-            method: HTTP method (GET, POST, PUT, etc.).
-
-        Returns:
-            The JSON response from the function.
-
-        Raises:
-            aiohttp.ClientError: If the request fails.
-            ValueError: If the response is not valid JSON.
+        :param payload: JSON payload to send to the function.
+        :param method: HTTP method to use for the request.
+        :return: The JSON response from the function.
+        :raises aiohttp.ClientError: If the HTTP request fails.
+        :raises ValueError: If the response cannot be parsed as JSON.
         """
         logger.info(
             f"Invoking Azure Function asynchronously: {self.config.function_url}"

@@ -74,23 +74,26 @@ class LogicAppsClient:
     def __init__(self, config: LogicAppConfig) -> None:
         """Initialize the Logic Apps client.
 
-        Args:
-            config: Configuration for the Logic App workflow.
+        :param config: Configuration object containing workflow endpoint and settings.
+        :raises ValueError: If configuration is invalid.
         """
-        self.config = config
-        self._credential: Optional[DefaultAzureCredential] = None
+        try:
+            self.config = config
+            self._credential: Optional[DefaultAzureCredential] = None
 
-        if self.config.use_managed_identity:
-            self._credential = DefaultAzureCredential()
-            logger.info("Initialized Logic Apps client with managed identity")
-        else:
-            logger.info("Initialized Logic Apps client with workflow URL")
+            if self.config.use_managed_identity:
+                self._credential = DefaultAzureCredential()
+                logger.info("Initialized Logic Apps client with managed identity")
+            else:
+                logger.info("Initialized Logic Apps client with workflow URL")
+        except Exception as e:
+            logger.error(f"Failed to initialize Logic Apps client: {str(e)}")
+            raise ValueError(f"Client initialization failed: {str(e)}") from e
 
     def _get_headers(self) -> Dict[str, str]:
         """Get HTTP headers for the request.
 
-        Returns:
-            Dictionary of HTTP headers.
+        :return: Dictionary containing standard HTTP headers.
         """
         headers = {"Content-Type": "application/json"}
         logger.debug("Prepared request headers")
@@ -101,16 +104,11 @@ class LogicAppsClient:
     ) -> Dict[str, Any]:
         """Trigger a Logic App workflow synchronously.
 
-        Args:
-            payload: JSON payload to send to the workflow.
-            wait_for_completion: If True, wait for the workflow to complete.
-
-        Returns:
-            Response from the workflow trigger or final status if waiting.
-
-        Raises:
-            requests.RequestException: If the request fails.
-            ValueError: If the response is not valid JSON.
+        :param payload: JSON payload to send to the workflow trigger.
+        :param wait_for_completion: Whether to wait for workflow completion before returning.
+        :return: Response from the workflow trigger or final status if waiting.
+        :raises requests.RequestException: If the HTTP request fails.
+        :raises ValueError: If the response cannot be parsed as JSON.
         """
         logger.info(f"Triggering Logic App workflow: {self.config.workflow_url}")
         logger.debug(
@@ -126,7 +124,6 @@ class LogicAppsClient:
             )
             response.raise_for_status()
 
-            # Try to parse JSON response, but handle empty responses
             try:
                 result = response.json()
             except ValueError:
