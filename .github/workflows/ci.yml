@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+# Restrict permissions for security
+permissions:
+  contents: read
+
 env:
   PYTHON_VERSION: "3.11"
 
@@ -13,6 +17,8 @@ jobs:
   lint:
     name: Lint
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
@@ -41,6 +47,8 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
@@ -69,6 +77,8 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs: [lint, test]
     steps:
       - uses: actions/checkout@v4
