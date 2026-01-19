@@ -14,22 +14,19 @@ This lab focuses on the decoupled approach: your agent lives in AI Foundry, and 
 
 ## Assignment
 
-| Component | Points |
-|-----------|--------|
-| Architecture diagram + brief reasoning | 15 pts |
-| **Choose one:** | |
-| → Create an Azure Function and connect it to your agent | 15 pts |
-| → Create a Logic App and connect it to your agent | 10 pts |
+See the full assignment details: **[Week 3 Assignment](docs/asigments.md)**
 
-## Labs
+## Labs (Divide and Conquer)
 
-Work through these notebooks in order:
+Build step by step — don't try to do everything at once:
 
-| Lab | Topic | Notebook |
-|-----|-------|----------|
-| 1 | Create an Azure Function | [lab1_azure_functions.ipynb](notebooks/lab1_azure_functions.ipynb) |
-| 2 | Create a Logic App | [lab2_logic_apps.ipynb](notebooks/lab2_logic_apps.ipynb) |
-| 3 | Build your Agent + Add Tools + Chat | [lab3_complete_agent.ipynb](notebooks/lab3_complete_agent.ipynb) |
+| Step | Lab | What You'll Build |
+|------|-----|-------------------|
+| 1 | [Lab 1: Azure Functions](notebooks/lab1_azure_functions.ipynb) | Create and deploy an Azure Function |
+| 2 | [Lab 2: Logic Apps](notebooks/lab2_logic_apps.ipynb) | Create and configure a Logic App |
+| 3 | [Lab 3: Single Agent Tool Calling](notebooks/lab3_single_agent_tool_calling.ipynb) | Build your agent, add tools, chat with it |
+
+> **Tip**: Complete Lab 1 OR Lab 2 first (depending on which tool you choose), then move to Lab 3 to wire everything together.
 
 ## Getting Started
 

@@ -1,213 +1,85 @@
 # Quick Start Guide
 
-This guide will get you up and running with the Azure AI Foundry Agent Extension in under 10 minutes.
+Get your local environment ready to run the labs.
 
 ## Prerequisites
 
-- Python 3.10 or later
-- Azure subscription (for deploying functions/logic apps)
-- pip package manager
+- [VS Code](https://code.visualstudio.com/) with the [Jupyter extension](https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter)
+- [uv](https://docs.astral.sh/uv/) — fast Python package manager
 
-## Step 1: Clone and Install (2 minutes)
+## Step 1: Install uv
+
+```bash
+# macOS/Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Windows
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+## Step 2: Clone and Setup Environment
 
 ```bash
 # Clone the repository
-git clone https://github.com/pablosalvador10/northwestern-msai-foundry-agent-extension.git
-cd northwestern-msai-foundry-agent-extension
+git clone <repo-url>
+cd northwestern-msai-foundry-agent-tool-extension
 
-# Install dependencies
-pip install -r requirements.txt
-```
+# Create virtual environment and install dependencies
+uv venv .venv-msai-foundry-agents
+source .venv-msai-foundry-agents/bin/activate  # On Windows: .venv-msai-foundry-agents\Scripts\activate
+uv pip install -r requirements.txt
 
-## Step 2: Configure Environment (3 minutes)
-
-```bash
-# Copy the example environment file
+# Create your .env file
 cp .env.example .env
-
-# Edit .env with your Azure credentials
-# At minimum, set:
-# - AZURE_FUNCTION_URL
-# - AZURE_FUNCTION_KEY
-# - LOGIC_APP_URL
 ```
 
-## Step 3: Run Your First Example (2 minutes)
+## Step 3: Configure Your .env File
 
-### Azure Function Example
+The notebooks use `python-dotenv` to load secrets from a `.env` file. 
 
-```python
-from src.abstractions.azure_functions import FunctionConfig, AzureFunctionsClient
+**You only need to fill in the variables for the lab you're working on:**
 
-# Configure
-config = FunctionConfig(
-    function_url="https://your-app.azurewebsites.net/api/function",
-    function_key="your-key"
-)
+| Lab | Variables Needed |
+|-----|------------------|
+| Lab 1 | `AZURE_FUNCTION_URL`, `AZURE_FUNCTION_KEY` |
+| Lab 2 | `LOGIC_APP_URL` |
+| Lab 3 | `PROJECT_ENDPOINT`, `MODEL_DEPLOYMENT_NAME` + variables from Lab 1 or 2 |
 
-# Use
-client = AzureFunctionsClient(config)
-result = client.invoke_function({"data": "test"})
-print(result)
-```
-
-### Logic App Example
-
-```python
-from src.abstractions.logic_apps import LogicAppConfig, LogicAppsClient
-
-# Configure
-config = LogicAppConfig(
-    workflow_url="https://prod-123.eastus.logic.azure.com:443/workflows/..."
-)
-
-# Use
-client = LogicAppsClient(config)
-result = client.trigger_workflow({"action": "test"})
-print(result)
-```
-
-## Step 4: Explore Interactive Labs (3 minutes)
-
-Open Jupyter notebooks for hands-on learning:
+Open `.env` and uncomment/fill in only what you need:
 
 ```bash
-# Install Jupyter if needed
-pip install jupyter
+# Uncomment and fill in for Lab 1
+# AZURE_FUNCTION_URL=https://your-function-app.azurewebsites.net/api/analyze_data
+# AZURE_FUNCTION_KEY=your-function-key-here
 
-# Launch notebooks
-jupyter notebook notebooks/
+# Uncomment and fill in for Lab 2
+# LOGIC_APP_URL=https://prod-xx.eastus.logic.azure.com/workflows/...
+
+# Uncomment and fill in for Lab 3
+# PROJECT_ENDPOINT=https://your-project.services.ai.azure.com
+# MODEL_DEPLOYMENT_NAME=gpt-4o
 ```
 
-Start with:
-1. `lab1_azure_functions.ipynb` - Learn Azure Functions integration
-2. `lab2_logic_apps.ipynb` - Learn Logic Apps orchestration
-3. `lab3_complete_agent.ipynb` - Build a complete AI agent
+> **How it works**: Each notebook calls `load_dotenv()` which reads your `.env` file and makes the values available via `os.getenv()`.
 
-## Step 5: Run Tests (Optional)
+## Step 4: Open in VS Code
 
 ```bash
-# Run all tests
-pytest tests/ -v
-
-# Run with coverage
-pytest tests/ -v --cov=src
+code .
 ```
 
-## Common Use Cases
-
-### Use Case 1: Data Processing
-
-```python
-from src.abstractions.azure_functions import DataProcessorFunction, FunctionConfig
-
-config = FunctionConfig(
-    function_url="https://your-app.azurewebsites.net/api/process",
-    function_key="your-key"
-)
-
-processor = DataProcessorFunction(config)
-result = processor.process_data({"values": [1, 2, 3, 4, 5]})
-```
-
-### Use Case 2: Workflow Orchestration
-
-```python
-from src.abstractions.logic_apps import WorkflowOrchestrator, LogicAppConfig
-
-config = LogicAppConfig(
-    workflow_url="https://prod-123.eastus.logic.azure.com:443/workflows/..."
-)
-
-orchestrator = WorkflowOrchestrator(config)
-result = orchestrator.execute_workflow(
-    workflow_type="approval",
-    data={"amount": 5000, "requester": "user@company.com"}
-)
-```
-
-### Use Case 3: AI Agent with Tools
-
-```python
-from src.agent_core import AgentConfig, FoundryAgent
-from src.abstractions.azure_functions import FunctionConfig
-from src.abstractions.logic_apps import LogicAppConfig
-
-# Configure agent
-agent = FoundryAgent(AgentConfig(
-    endpoint="https://your-endpoint.openai.azure.com",
-    api_key="your-api-key"
-))
-
-# Register tools
-agent.register_azure_function("processor", function_config)
-agent.register_logic_app("notifier", logic_app_config)
-
-# Use the agent
-response = agent.run("Process these numbers: 1, 2, 3, 4, 5")
-print(response)
-```
-
-## Troubleshooting
-
-### Issue: Module Not Found
-
-```bash
-# Make sure you're in the project directory
-cd northwestern-msai-foundry-agent-extension
-
-# Reinstall dependencies
-pip install -r requirements.txt
-```
-
-### Issue: Azure Authentication Failed
-
-- Verify your function keys and endpoint URLs in `.env`
-- Check that your Azure resources are deployed and accessible
-- Try using a simple HTTP client (curl/Postman) to test endpoints directly
-
-### Issue: Tests Failing
-
-```bash
-# Install test dependencies
-pip install pytest pytest-cov pytest-mock
-
-# Run tests with verbose output
-pytest tests/ -v -s
-```
+1. Open any notebook in the `notebooks/` folder
+2. VS Code will prompt you to select a kernel — choose the `.venv-msai-foundry-agents` Python environment you just created
+3. You're ready to run cells!
 
 ## Next Steps
 
-1. **Deploy Your Own Azure Resources**
-   - [Create an Azure Function App](https://learn.microsoft.com/en-us/azure/azure-functions/functions-create-function-app-portal)
-   - [Create a Logic App](https://learn.microsoft.com/en-us/azure/logic-apps/quickstart-create-example-consumption-workflow)
+Each lab will guide you through the Azure services you need:
 
-2. **Customize the Agent**
-   - Add your own tools in `src/abstractions/`
-   - Extend the agent core in `src/agent_core.py`
+| Lab | Azure Services Required |
+|-----|------------------------|
+| [Lab 1: Azure Functions](../notebooks/lab1_azure_functions.ipynb) | Azure Function App |
+| [Lab 2: Logic Apps](../notebooks/lab2_logic_apps.ipynb) | Azure Logic App |
+| [Lab 3: Single Agent Tool Calling](../notebooks/lab3_single_agent_tool_calling.ipynb) | Azure AI Foundry |
 
-3. **Build Your Application**
-   - Use the abstractions as building blocks
-   - Create custom workflows for your use case
-
-4. **Contribute**
-   - Found a bug? Open an issue
-   - Have an improvement? Submit a PR
-
-## Resources
-
-- [Full Documentation](README.md)
-- [Architecture Overview](docs/architecture.md)
-- [Design Rationale](docs/rationale.md)
-- [Azure Portal](https://portal.azure.com)
-- [Azure AI Foundry](https://ai.azure.com)
-
-## Support
-
-- 📧 Issues: [GitHub Issues](https://github.com/pablosalvador10/northwestern-msai-foundry-agent-extension/issues)
-- 💬 Discussions: [GitHub Discussions](https://github.com/pablosalvador10/northwestern-msai-foundry-agent-extension/discussions)
-- 📚 Documentation: [docs/](docs/)
-
----
-
-**Happy coding! 🚀**
+Start with the lab that matches your assignment choice. Each notebook includes setup instructions for the specific Azure resources you'll need.

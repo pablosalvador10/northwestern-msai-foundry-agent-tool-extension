@@ -119,4 +119,4 @@ Ready to build? Head to the notebooks:
 
 1. **[Lab 1](../notebooks/lab1_azure_functions.ipynb)** — Create an Azure Function
 2. **[Lab 2](../notebooks/lab2_logic_apps.ipynb)** — Create a Logic App  
-3. **[Lab 3](../notebooks/lab3_complete_agent.ipynb)** — Wire it all together in Azure AI Foundry
+3. **[Lab 3](../notebooks/lab3_single_agent_tool_calling.ipynb)** — Wire it all together in Azure AI Foundry
