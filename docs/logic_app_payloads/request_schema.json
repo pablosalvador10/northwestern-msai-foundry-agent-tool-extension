@@ -1,0 +1,50 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Logic App Request Schema",
+    "description": "Expected input schema for the Logic App HTTP trigger",
+    "type": "object",
+    "properties": {
+        "action": {
+            "type": "string",
+            "description": "The action to perform in the workflow",
+            "examples": ["process_document", "send_notification", "validate_data"]
+        },
+        "inputData": {
+            "type": "object",
+            "description": "Input data for the workflow",
+            "additionalProperties": true
+        },
+        "correlationId": {
+            "type": "string",
+            "description": "Optional correlation ID for request tracking",
+            "pattern": "^[a-zA-Z0-9-]+$"
+        },
+        "metadata": {
+            "type": "object",
+            "description": "Additional metadata for the request",
+            "properties": {
+                "source": {
+                    "type": "string",
+                    "description": "Source of the request"
+                },
+                "user_id": {
+                    "type": "string",
+                    "description": "User identifier"
+                },
+                "priority": {
+                    "type": "string",
+                    "enum": ["low", "normal", "high"],
+                    "default": "normal"
+                }
+            },
+            "additionalProperties": true
+        },
+        "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Request timestamp in ISO 8601 format"
+        }
+    },
+    "required": ["action"],
+    "additionalProperties": false
+}

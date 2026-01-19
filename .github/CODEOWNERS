@@ -1,0 +1,27 @@
+# Code Owners for Northwestern MSAI Foundry Agent Extension
+# These owners will be requested for review on PRs
+
+# Default owners for everything
+* @pablosalvador10
+
+# Source code
+/src/ @pablosalvador10
+
+# Tests
+/tests/ @pablosalvador10
+
+# Documentation
+/docs/ @pablosalvador10
+README.md @pablosalvador10
+
+# Infrastructure
+/infra/ @pablosalvador10
+
+# CI/CD
+/.github/ @pablosalvador10
+
+# Azure Functions
+/functions/ @pablosalvador10
+
+# Notebooks
+/notebooks/ @pablosalvador10

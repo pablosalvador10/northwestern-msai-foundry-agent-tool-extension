@@ -205,3 +205,13 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Azure Functions
+functions/.venv/
+functions/__pycache__/
+functions/bin/
+functions/obj/
+.azure/
+
+# Local settings (keep local.settings.json as example but ignore sensitive ones)
+# local.settings.json is included for example purposes

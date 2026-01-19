@@ -1,0 +1,38 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Logic App Response Schema",
+    "description": "Expected response schema from the Logic App workflow",
+    "type": "object",
+    "properties": {
+        "workflow_run_id": {
+            "type": "string",
+            "description": "Unique identifier for this workflow run"
+        },
+        "status": {
+            "type": "string",
+            "enum": ["pending", "running", "succeeded", "failed", "cancelled"],
+            "description": "Current status of the workflow execution"
+        },
+        "output_data": {
+            "type": "object",
+            "description": "Output data from the workflow",
+            "additionalProperties": true
+        },
+        "error": {
+            "type": ["string", "null"],
+            "description": "Error message if the workflow failed"
+        },
+        "started_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Workflow start timestamp"
+        },
+        "completed_at": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Workflow completion timestamp"
+        }
+    },
+    "required": ["status"],
+    "additionalProperties": false
+}

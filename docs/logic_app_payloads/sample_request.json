@@ -1,0 +1,21 @@
+{
+    "action": "process_document",
+    "inputData": {
+        "document_id": "doc-12345",
+        "document_type": "invoice",
+        "document_url": "https://storage.blob.core.windows.net/documents/invoice-001.pdf",
+        "processing_options": {
+            "extract_text": true,
+            "extract_tables": true,
+            "language": "en"
+        }
+    },
+    "correlationId": "corr-abc-123-xyz",
+    "metadata": {
+        "source": "ai-agent",
+        "user_id": "user-001",
+        "priority": "normal",
+        "department": "finance"
+    },
+    "timestamp": "2024-01-15T10:30:00.000000Z"
+}

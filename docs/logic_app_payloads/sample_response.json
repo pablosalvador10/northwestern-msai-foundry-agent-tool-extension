@@ -1,0 +1,20 @@
+{
+    "workflow_run_id": "08585123-4567-89ab-cdef-0123456789ab",
+    "status": "succeeded",
+    "output_data": {
+        "document_id": "doc-12345",
+        "processed": true,
+        "extracted_data": {
+            "invoice_number": "INV-2024-001",
+            "vendor_name": "Acme Corp",
+            "total_amount": 1250.00,
+            "currency": "USD",
+            "due_date": "2024-02-15"
+        },
+        "confidence_score": 0.95,
+        "processing_time_ms": 2340
+    },
+    "error": null,
+    "started_at": "2024-01-15T10:30:00.000000Z",
+    "completed_at": "2024-01-15T10:30:02.340000Z"
+}
