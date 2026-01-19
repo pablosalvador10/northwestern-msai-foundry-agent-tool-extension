@@ -27,77 +27,96 @@ The key insight: **the agent lives in the cloud (Azure AI Foundry), but its tool
 ## Architecture Diagram
 
 ```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#0078D4', 'primaryTextColor': '#fff', 'primaryBorderColor': '#005A9E', 'lineColor': '#5C5C5C', 'secondaryColor': '#F3F2F1', 'tertiaryColor': '#E1DFDD', 'fontFamily': 'Segoe UI, sans-serif'}}}%%
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#0078D4', 'primaryTextColor': '#fff', 'primaryBorderColor': '#005A9E', 'lineColor': '#666666', 'secondaryColor': '#F3F2F1', 'tertiaryColor': '#E1DFDD', 'fontFamily': 'Segoe UI, sans-serif', 'fontSize': '14px'}}}%%
 
 flowchart TB
-    subgraph HUB["<b>Azure AI Foundry Hub</b>"]
-        subgraph PROJECT["<b>Azure AI Project</b>"]
-            subgraph SERVICE["<b>Azure AI Agent Service</b>"]
-                subgraph RUNTIME["<b>🤖 Agent Runtime</b>"]
+    subgraph HUB[" "]
+        direction TB
+        HUB_LABEL["Azure AI Foundry Hub"]
+        
+        subgraph PROJECT[" "]
+            direction TB
+            PROJECT_LABEL["Azure AI Project"]
+            
+            subgraph SERVICE[" "]
+                direction TB
+                SERVICE_LABEL["Azure AI Agent Service"]
+                
+                subgraph RUNTIME[" "]
                     direction TB
+                    RUNTIME_LABEL["Agent Runtime"]
                     
-                    subgraph CORE["Agent Core"]
-                        direction LR
-                        THREAD["💬 Thread<br/><i>Conversation state</i>"]
-                        MEMORY["🧠 Memory<br/><i>Context window</i>"]
-                        LLM["⚡ LLM<br/><i>GPT-4o</i>"]
-                    end
+                    THREAD["Thread"]
+                    LLM["LLM"]
+                    PYTHON["Python Function Tool · In-Process"]
                     
-                    subgraph TOOLS["Tools"]
-                        direction LR
-                        PYTHON["🐍 <b>Python Function Tool</b><br/><i>Runs in-process</i><br/><code>summarize()</code><br/><code>extract_insights()</code>"]
-                        HTTP["🌐 <b>HTTP Tools</b><br/><i>External calls</i>"]
-                    end
-                    
-                    CORE --> TOOLS
+                    THREAD --- LLM
+                    LLM --- PYTHON
                 end
             end
         end
     end
 
-    subgraph AZURE["<b>Azure Services</b>"]
-        direction LR
-        FUNC["<b>⚡ Azure Function</b><br/><code>analyze_data()</code><br/><code>process_csv()</code><br/><br/><i>Serverless compute</i>"]
-        LOGIC["<b>🔄 Logic App</b><br/><code>send_email()</code><br/><code>notify_slack()</code><br/><br/><i>Workflow automation</i>"]
+    subgraph EXTERNAL[" "]
+        direction TB
+        EXTERNAL_LABEL["External Tools · HTTPS"]
+        
+        FUNC["Azure Function"]
+        LOGIC["Logic App"]
     end
 
-    HTTP -->|"HTTPS"| FUNC
-    HTTP -->|"HTTPS"| LOGIC
+    PYTHON -.->|"HTTPS"| FUNC
+    PYTHON -.->|"HTTPS"| LOGIC
 
-    style HUB fill:#E6F2FF,stroke:#0078D4,stroke-width:3px,color:#004578
-    style PROJECT fill:#CCE4F7,stroke:#0078D4,stroke-width:2px,color:#004578
-    style SERVICE fill:#B3D7F2,stroke:#0078D4,stroke-width:2px,color:#004578
-    style RUNTIME fill:#0078D4,stroke:#005A9E,stroke-width:2px,color:#FFFFFF
-    style CORE fill:#005A9E,stroke:#004578,stroke-width:1px,color:#FFFFFF
-    style TOOLS fill:#005A9E,stroke:#004578,stroke-width:1px,color:#FFFFFF
+    style HUB fill:#E8F4FD,stroke:#0078D4,stroke-width:2px
+    style HUB_LABEL fill:none,stroke:none,color:#0078D4,font-weight:bold
     
-    style THREAD fill:#9B59B6,stroke:#7D3C98,stroke-width:1px,color:#FFFFFF
-    style MEMORY fill:#9B59B6,stroke:#7D3C98,stroke-width:1px,color:#FFFFFF
-    style LLM fill:#3498DB,stroke:#2980B9,stroke-width:1px,color:#FFFFFF
+    style PROJECT fill:#D1E9FA,stroke:#0078D4,stroke-width:2px
+    style PROJECT_LABEL fill:none,stroke:none,color:#0078D4,font-weight:bold
     
-    style PYTHON fill:#2ECC71,stroke:#27AE60,stroke-width:2px,color:#FFFFFF
-    style HTTP fill:#F39C12,stroke:#D68910,stroke-width:2px,color:#FFFFFF
+    style SERVICE fill:#B8DDF7,stroke:#0078D4,stroke-width:2px
+    style SERVICE_LABEL fill:none,stroke:none,color:#0078D4,font-weight:bold
     
-    style AZURE fill:#F5F5F5,stroke:#5C5C5C,stroke-width:2px,stroke-dasharray:5 5,color:#333
+    style RUNTIME fill:#0078D4,stroke:#005A9E,stroke-width:2px
+    style RUNTIME_LABEL fill:none,stroke:none,color:#FFFFFF,font-weight:bold
+    
+    style THREAD fill:#9B59B6,stroke:#8E44AD,stroke-width:2px,color:#FFFFFF
+    style LLM fill:#3498DB,stroke:#2980B9,stroke-width:2px,color:#FFFFFF
+    style PYTHON fill:#27AE60,stroke:#1E8449,stroke-width:2px,color:#FFFFFF
+    
+    style EXTERNAL fill:#F8F9FA,stroke:#6C757D,stroke-width:2px,stroke-dasharray:5 5
+    style EXTERNAL_LABEL fill:none,stroke:none,color:#6C757D,font-weight:bold
+    
     style FUNC fill:#F39C12,stroke:#D68910,stroke-width:2px,color:#FFFFFF
     style LOGIC fill:#E74C3C,stroke:#C0392B,stroke-width:2px,color:#FFFFFF
+
+    linkStyle 0,1 stroke:none
+    linkStyle 2,3 stroke:#666666,stroke-width:2px,stroke-dasharray:5 5
 ```
 
 ### Understanding the Architecture
 
-| Layer | What It Is | Your Responsibility |
-|-------|------------|---------------------|
-| **Azure AI Foundry Hub** | Top-level container for AI resources | Create once, share across projects |
-| **Azure AI Project** | Workspace for a specific application | One per app (e.g., "Research Assistant") |
-| **Azure AI Agent Service** | Managed service that runs agents | Microsoft manages this |
-| **Agent Runtime** | Where your agent actually executes | Configure via SDK |
+| Layer | What It Is |
+|-------|------------|
+| **Azure AI Foundry Hub** | Top-level container for AI resources |
+| **Azure AI Project** | Workspace for your application |
+| **Azure AI Agent Service** | Managed service that hosts agents |
+| **Agent Runtime** | Where your agent executes |
 
-### Tool Types Explained
+### Components Inside the Agent Runtime
 
-| Tool Type | Runs Where | Use Case | Example |
-|-----------|------------|----------|---------|
-| 🐍 **Python Function Tool** | Inside the agent runtime | Simple logic, text processing | `summarize()`, `format_output()` |
-| 🌐 **HTTP Tool** → Azure Function | External serverless compute | Heavy computation, data processing | `analyze_data()`, `call_api()` |
+| Component | Purpose |
+|-----------|---------|
+| **Thread** | Maintains conversation state and history |
+| **LLM** | The model that powers reasoning (GPT, Claude, etc.) |
+| **Python Function Tool** | Code that runs in-process inside the agent |
+
+### External Tools (via HTTPS)
+
+| Tool | Runs Where | Use Case |
+|------|------------|----------|
+| **Azure Function** | Serverless compute | Heavy processing, data analysis |
+| **Logic App** | Workflow engine | Email, Slack, integrations |
 | 🌐 **HTTP Tool** → Logic App | External workflow engine | Notifications, integrations | `send_email()`, `notify_slack()` |
 
 > **Key insight**: Python Function Tools run *inside* the agent (fast, no network hop). HTTP Tools call *external* services (scalable, independent).
