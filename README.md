@@ -1,8 +1,24 @@
-# Extending Azure AI Foundry Agents with Tools
+# Building Agents in Azure AI Foundry
 
-This lab teaches you how to extend AI agents with external tools using **Azure Functions** and **Azure Logic Apps**.
+Build an AI agent. Give it tools. Deploy it to the cloud.
 
-## The Big Picture
+> Start with the **single-agent pattern** — one agent orchestrating multiple tools. Master this foundation, then level up to multi-agent systems and MCP.
+
+**Jump to:** [The Big Picture](#the-big-picture) · [Assignments](#assignments) · [Labs](#labs-divide-and-conquer) · [Getting Started](#getting-started) · [Resources](#resources)
+
+
+## The Big Picture 
+
+### *Single Agent vs Multi-Agent*
+
+A **single agent** is one AI entity that reasons, decides, and acts. It's the right choice when:
+- The task can be handled by one "brain" with the right tools
+- You want atomic, predictable decisions
+- Complexity is manageable without delegation
+
+When tasks require specialization, parallel work, or debate between perspectives — that's when you graduate to **multi-agent systems**. But start simple. Most problems don't need an orchestra; they need one good musician with the right instruments.
+
+### *Tool Calling*
 
 When you create an agent in **Azure AI Foundry**, you get a powerful AI runtime in the cloud. But agents become truly useful when they can take **actions** — calling APIs, processing data, sending notifications, etc.
 
@@ -10,9 +26,23 @@ To add actions, we register **tools**. Tools can be:
 - **In-process functions** (code that runs inside the agent)
 - **External services** like **Azure Functions** or **Logic Apps** (decoupled, cloud-based)
 
-This lab focuses on the decoupled approach: your agent lives in AI Foundry, and your tools live independently in Azure — clean, scalable, and production-ready.
+These labs focus on the decoupled approach: your agent lives in AI Foundry, and your tools live independently in Azure — clean, scalable, and production-ready. See the [Labs](#labs-divide-and-conquer) below.
 
-## Assignment
+### *MCP: Model Context Protocol*
+
+**MCP** is an open standard for connecting AI agents to tools via a client-server architecture. Instead of hardcoding tool integrations:
+
+- **MCP Server** = exposes tools (your functions, APIs, databases)
+- **MCP Client** = the agent that discovers and calls those tools
+
+Why it matters:
+- **Reusability** — Build a tool once, use it across many agents
+- **Security** — Centralized auth, audit, and access control
+- **Discovery** — Agents can find and learn new tools dynamically
+
+*We'll explore MCP in future labs.*
+
+## Assignments
 
 See the full assignment details: **[Week 3 Assignment](docs/asigments.md)**
 
