@@ -1,23 +1,29 @@
 # Azure AI and Core SDKs - Microsoft Agent Framework
-azure-ai-projects>=1.0.0b1
-azure-ai-agents>=1.0.0b1
-azure-identity>=1.19.0
-azure-core>=1.30.0
+agent-framework-azure-ai
+azure-ai-projects>=2.0.0b2
+azure-ai-agents>=1.2.0b5
+azure-identity>=1.25.0
+azure-core>=1.38.0
 
 # Azure Functions and Logic Apps
-azure-functions>=1.20.0
+azure-functions>=1.24.0
 azure-mgmt-logic>=10.0.0
 azure-mgmt-web>=7.3.0
 
 # AI and ML
-openai>=1.54.0
-python-dotenv>=1.0.0
+openai>=1.99.0
+python-dotenv>=1.2.0
 
 # Development and Testing
 pytest>=8.3.0
 pytest-cov>=6.0.0
 pytest-asyncio>=0.24.0
 pytest-mock>=3.14.0
+ipykernel>=6.29.0
+jupyter>=1.0.0
+
+# UI for Notebook Chat Interface
+gradio>=4.0.0
 
 # Code Quality
 ruff>=0.8.0
