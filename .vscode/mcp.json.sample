@@ -1,0 +1,16 @@
+{
+    "servers": {
+        "lab4-mcp-server-local": {
+            "type": "http",
+            "url": "http://localhost:7071/runtime/webhooks/mcp"
+        },
+        "lab4-mcp-server-remote": {
+            "type": "http",
+            "url": "https://YOUR_FUNCTION_NAME.azurewebsites.net/runtime/webhooks/mcp",
+            "headers": {
+                "x-functions-key": "YOUR_MCP_EXTENSION_KEY"
+            }
+        }
+    },
+    "inputs": []
+}
